@@ -14,9 +14,24 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- 3. MIDDLEWARE SETUP ---
+
+// NEW: More robust CORS configuration
+const allowedOrigins = [process.env.CLIENT_URL, "https://ai-powered-netflix-clone-1.onrender.com"];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(cookieParser());
-app.use(cors({origin: process.env.CLIENT_URL, credentials: true}))
+
 
 // --- 4. API ROUTES ---
 app.get("/", (req, res) => {
@@ -93,8 +108,8 @@ app.post("/api/auth/signup", async (req, res) => {
       console.log("[SIGNUP] Step 7: Setting HTTP-only cookie.");
       res.cookie("token", token, {
         httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: "strict",
+        secure: true,
+        sameSite: "none", // Allow cross-site cookies
         maxAge: 7 * 24 * 60 * 60 * 1000,
       });
       console.log("[SIGNUP] Cookie set.");
@@ -164,8 +179,8 @@ app.post("/api/auth/signin", async (req, res) => {
     console.log("[SIGNIN] Step 5: Setting HTTP-only cookie.");
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "none", //for cross-site requests
+      secure: true,
+      sameSite: "none", // Allow cross-site cookies
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     console.log("[SIGNIN] Cookie set.");
@@ -236,8 +251,11 @@ app.post("/api/auth/logout", (req, res) => {
   console.log("\n[LOGOUT] Route hit.");
   try {
     console.log("[LOGOUT] Step 1: Clearing 'token' cookie.");
-    // The res.clearCookie() method is the simplest way to remove a cookie.
-    res.clearCookie("token");
+    res.clearCookie("token", {
+      httpOnly: true,
+      secure: true,
+      sameSite: "none",
+    });
     console.log("[LOGOUT] Step 2: Sending 200 OK response.");
     return res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
