@@ -165,7 +165,7 @@ app.post("/api/auth/signin", async (req, res) => {
     res.cookie("token", token, {
       httpOnly: true,
       secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      sameSite: "none", //for cross-site requests
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
     console.log("[SIGNIN] Cookie set.");
