@@ -19,7 +19,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoading: true, message: null });
 
     try {
-      const response = await axios.post(`${API_URL}/signup`, {
+      const response = await axios.post(`${API_URL}/api/auth/signup`, {
         username,
         email,
         password,
@@ -41,8 +41,8 @@ export const useAuthStore = create((set) => ({
     set({isLoading: true, message: null, error: null});
 
     try {
-      const response = await axios.post(`${API_URL}/signin`, {
-        username, 
+      const response = await axios.post(`${API_URL}/api/auth/signin`, {
+        username,
         password
       })
 
@@ -69,7 +69,7 @@ export const useAuthStore = create((set) => ({
       set({fetchingUser: true, error: null});
 
       try {
-        const response = await axios.get(`${API_URL}/me`);
+        const response = await axios.get(`${API_URL}/api/auth/me`);
         set({user: response.data.user, fetchingUser: false})
       } catch (error) {
       set({
@@ -86,10 +86,10 @@ export const useAuthStore = create((set) => ({
     set({isLoading: true, error: null, message: null })
 
     try {
-      const response = await axios.post(`${API_URL}/logout `);
+      const response = await axios.post(`${API_URL}/api/auth/logout`);
       const {message} = response.data;
       set({
-        message, 
+        message,
         isLoading: false,
         user: null,
         error: null
