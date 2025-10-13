@@ -2,7 +2,7 @@ import { create } from "zustand";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-const API_URL = "http://localhost:3000/api/auth"
+const API_URL = "https://ai-powered-netflix-clone.onrender.com";
 
 export const useAuthStore = create((set) => ({
   // Initial States
