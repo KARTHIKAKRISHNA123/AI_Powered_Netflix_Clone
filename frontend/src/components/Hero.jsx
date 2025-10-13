@@ -10,7 +10,7 @@ const Hero = () => {
   method: 'GET',
   headers: {
     accept: 'application/json',
-    Authorization: 'Bearer eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJiYmYyYmE3MDRjOWU1Mjc0Yjk2ZTVlYzIzMWIwYTA5ZCIsIm5iZiI6MTc1OTU4OTc0NS43NzMsInN1YiI6IjY4ZTEzNTcxMWU3ZjcyMDFiMjljYTNkNyIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.LuNYbGoOh-ZN2o-0tCZxKdU3xWWWU_-r_IJmbsoaOrw'
+    Authorization: import.meta.env.VITE_TMDB_API_KEY
   }
 };
 

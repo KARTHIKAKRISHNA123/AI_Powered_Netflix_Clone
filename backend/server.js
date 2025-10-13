@@ -16,10 +16,10 @@ const PORT = process.env.PORT || 3000;
 // --- 3. MIDDLEWARE SETUP ---
 
 // **DEFINITIVE CORS CONFIGURATION**
-// This MUST come before any routes or other middleware that needs it.
+// This MUST come before any routes.
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // Uses the URL from your Render environment variables
+    origin: process.env.CLIENT_URL, // This uses the URL from your Render environment variables
     credentials: true,
   })
 );
@@ -31,7 +31,6 @@ app.use(cookieParser());
 app.get("/", (req, res) => {
   res.send("API is running...");
 });
-
 
 // --- AUTHENTICATION ROUTES ---
 
