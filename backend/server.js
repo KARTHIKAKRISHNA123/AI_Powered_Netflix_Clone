@@ -20,7 +20,6 @@ app.use(
     credentials: true,
   })
 );
-
 app.use(express.json());
 app.use(cookieParser());
 
@@ -46,11 +45,11 @@ app.post("/api/auth/signup", async (req, res) => {
     const newUser = await User.create({ username, email, password: hashedPassword });
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-    // **FIXED COOKIE SETTINGS**
+    // **DEFINITIVELY CORRECTED COOKIE SETTINGS**
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "none", // Corrected from "strict" to "none"
+      sameSite: "none", // This is the fix
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -75,11 +74,11 @@ app.post("/api/auth/signin", async (req, res) => {
     }
     const token = jwt.sign({ id: userDoc._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
-    // **FIXED COOKIE SETTINGS**
+    // **DEFINITIVELY CORRECTED COOKIE SETTINGS**
     res.cookie("token", token, {
       httpOnly: true,
       secure: true,
-      sameSite: "none", // Corrected from "strict" to "none"
+      sameSite: "none", // This is the fix
       maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
@@ -91,7 +90,7 @@ app.post("/api/auth/signin", async (req, res) => {
   }
 });
 
-// GET USER PROFILE ROUTE (No changes needed here, but included for completeness)
+// GET USER PROFILE ROUTE
 app.get("/api/auth/me", async (req, res) => {
   try {
     const { token } = req.cookies;
@@ -109,7 +108,7 @@ app.get("/api/auth/me", async (req, res) => {
   }
 });
 
-// LOGOUT ROUTE (This was already correct, but included for completeness)
+// LOGOUT ROUTE
 app.post("/api/auth/logout", (req, res) => {
   try {
     res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "none" });
