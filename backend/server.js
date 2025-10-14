@@ -14,12 +14,9 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // --- 3. MIDDLEWARE SETUP ---
-
-// **DEFINITIVE CORS CONFIGURATION**
-// This MUST come before any routes.
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // This uses the URL from your Render environment variables
+    origin: process.env.CLIENT_URL,
     credentials: true,
   })
 );
@@ -38,46 +35,29 @@ app.get("/", (req, res) => {
 app.post("/api/auth/signup", async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    if (
-      !username ||
-      !email ||
-      !password ||
-      username.trim() === "" ||
-      email.trim() === ""
-    ) {
+    if (!username || !email || !password || username.trim() === "" || email.trim() === "") {
       return res.status(400).json({ message: "All fields are required" });
     }
     const userExists = await User.findOne({ $or: [{ email }, { username }] });
     if (userExists) {
-      return res
-        .status(400)
-        .json({ message: "Username or email already exists" });
+      return res.status(400).json({ message: "Username or email already exists" });
     }
     const hashedPassword = await bcryptjs.hash(password, 10);
-    const newUser = await User.create({
-      username,
-      email,
-      password: hashedPassword,
-    });
-    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const newUser = await User.create({ username, email, password: hashedPassword });
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
+    // **FIXED COOKIE SETTINGS**
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none", // Corrected from "strict" to "none"
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    const userResponse = {
-      _id: newUser._id,
-      username: newUser.username,
-      email: newUser.email,
-    };
-    res
-      .status(201)
-      .json({ user: userResponse, message: "User signed up successfully" });
+    const userResponse = { _id: newUser._id, username: newUser.username, email: newUser.email };
+    res.status(201).json({ user: userResponse, message: "User signed up successfully" });
   } catch (error) {
+    console.error("Signup Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
@@ -93,37 +73,30 @@ app.post("/api/auth/signin", async (req, res) => {
     if (!userDoc || !(await bcryptjs.compare(password, userDoc.password))) {
       return res.status(400).json({ message: "Invalid credentials" });
     }
-    const token = jwt.sign({ id: userDoc._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
-    });
+    const token = jwt.sign({ id: userDoc._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
+    // **FIXED COOKIE SETTINGS**
     res.cookie("token", token, {
       httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
+      secure: true,
+      sameSite: "none", // Corrected from "strict" to "none"
+      maxAge: 7 * 24 * 60 * 60 * 1000,
     });
 
-    const userResponse = {
-      _id: userDoc._id,
-      username: userDoc.username,
-      email: userDoc.email,
-    };
-    res
-      .status(200)
-      .json({ user: userResponse, message: "Logged in successfully" });
+    const userResponse = { _id: userDoc._id, username: userDoc.username, email: userDoc.email };
+    res.status(200).json({ user: userResponse, message: "Logged in successfully" });
   } catch (error) {
+    console.error("Signin Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// GET USER PROFILE ROUTE
+// GET USER PROFILE ROUTE (No changes needed here, but included for completeness)
 app.get("/api/auth/me", async (req, res) => {
   try {
     const { token } = req.cookies;
     if (!token) {
-      return res
-        .status(401)
-        .json({ message: "Authorization denied, no token" });
+      return res.status(401).json({ message: "Authorization denied, no token" });
     }
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
     const user = await User.findById(decoded.id).select("-password");
@@ -136,19 +109,17 @@ app.get("/api/auth/me", async (req, res) => {
   }
 });
 
-// LOGOUT ROUTE
+// LOGOUT ROUTE (This was already correct, but included for completeness)
 app.post("/api/auth/logout", (req, res) => {
   try {
-    res.clearCookie("token", {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-    });
+    res.clearCookie("token", { httpOnly: true, secure: true, sameSite: "none" });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
+    console.error("Logout Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
+
 
 // --- 5. SERVER STARTUP ---
 app.listen(PORT, () => {
