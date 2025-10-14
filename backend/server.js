@@ -121,7 +121,6 @@ app.post("/api/auth/logout", (req, res) => {
 
 
 // --- 5. SERVER STARTUP ---
-app.listen(PORT, () => {
-  connectToDB();
-  console.log(`Server is running on http://localhost:${PORT}`);
-});
+// Connect to DB and export the app for Vercel
+connectToDB();
+export default app;
