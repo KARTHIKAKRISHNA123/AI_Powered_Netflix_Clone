@@ -4,6 +4,8 @@ import axios from "axios";
 axios.defaults.withCredentials = true;
 const API_URL = "https://ai-powered-netflix-clone.onrender.com";
 
+// const API_URL =   "http://localhost:3000";
+
 export const useAuthStore = create((set) => ({
   // Initial States
   user: null,
@@ -28,7 +30,9 @@ export const useAuthStore = create((set) => ({
       // CORRECTED ERROR HANDLING
       set({
         isLoading: false,
-        error: error.response?.data?.message || "Error signing up. Please try again.",
+        error:
+          error.response?.data?.message ||
+          "Error signing up. Please try again.",
       });
       throw error;
     }
@@ -50,7 +54,9 @@ export const useAuthStore = create((set) => ({
       // CORRECTED ERROR HANDLING
       set({
         isLoading: false,
-        error: error.response?.data?.message || "Error signing in. Please check your credentials.",
+        error:
+          error.response?.data?.message ||
+          "Error signing in. Please check your credentials.",
       });
       throw error;
     }
