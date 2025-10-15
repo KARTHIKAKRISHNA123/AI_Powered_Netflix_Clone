@@ -158,6 +158,18 @@ app.post("/api/auth/logout", (req, res) => {
 });
 
 // --- 5. SERVER STARTUP ---
-// Connect to DB and export the app
-connectToDB();
-export default app;
+const startServer = async () => {
+  try {
+    await connectToDB();
+
+    app.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
+    });
+
+  } catch (error) {
+    console.error("Failed to start server:", error);
+    process.exit(1);
+  }
+};
+
+startServer();
