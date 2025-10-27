@@ -70,6 +70,7 @@ app.post("/api/auth/signup", async (req, res) => {
       secure: isProduction, // Should be true in production (HTTPS)
       sameSite: isProduction ? "none" : "lax", // Must be 'none' for cross-site production
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      domain: isProduction ? ".onrender.com" : undefined,
     });
 
     const userResponse = {
@@ -109,6 +110,7 @@ app.post("/api/auth/signin", async (req, res) => {
       secure: isProduction, // Should be true in production (HTTPS)
       sameSite: isProduction ? "none" : "lax", // Must be 'none' for cross-site production
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      domain: isProduction ? ".onrender.com" : undefined,
     });
 
     const userResponse = {
@@ -157,19 +159,22 @@ app.get("/api/auth/me", async (req, res) => {
 
     console.log("User found:", user.username); // Log successful user retrieval
     res.status(200).json({ user });
-
   } catch (error) {
     // Log the specific error during verification or user lookup
     console.error("/api/auth/me Error:", error.message);
     // Determine if it's a JWT error or another issue
-    if (error.name === 'JsonWebTokenError' || error.name === 'TokenExpiredError') {
+    if (
+      error.name === "JsonWebTokenError" ||
+      error.name === "TokenExpiredError"
+    ) {
       res.status(401).json({ message: "Token is not valid" });
     } else {
-      res.status(500).json({ message: "Internal Server Error during auth check" });
+      res
+        .status(500)
+        .json({ message: "Internal Server Error during auth check" });
     }
   }
 });
-
 
 // LOGOUT ROUTE
 app.post("/api/auth/logout", (req, res) => {
@@ -182,6 +187,8 @@ app.post("/api/auth/logout", (req, res) => {
       secure: isProduction, // Match the setting logic used when creating
       sameSite: isProduction ? "none" : "lax", // Match the setting logic used when creating
       // Optionally add path: '/' if your cookies have a specific path
+      domain: isProduction ? ".onrender.com" : undefined,
+      path: "/",
     });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
@@ -200,7 +207,6 @@ const startServer = async () => {
       console.log(`NODE_ENV is set to: ${process.env.NODE_ENV}`); // Log NODE_ENV on startup
       console.log(`CLIENT_URL is set to: ${process.env.CLIENT_URL}`); // Log CLIENT_URL on startup
     });
-
   } catch (error) {
     console.error("Failed to start server:", error);
     process.exit(1);
