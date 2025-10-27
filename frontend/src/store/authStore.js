@@ -63,14 +63,22 @@ export const useAuthStore = create((set) => ({
   },
 
   fetchUser: async () => {
+    console.log("authStore.js: fetchUser function started.");
     set({ fetchingUser: true, error: null });
-
     try {
+      console.log(`authStore.js: Making GET request to ${API_URL}/api/auth/me`);
       const response = await axios.get(`${API_URL}/api/auth/me`);
+      console.log(
+        "authStore.js: Received response from /api/auth/me:",
+        response.data
+      );
       set({ user: response.data.user, fetchingUser: false });
     } catch (error) {
+      console.error(
+        "authStore.js: Error in fetchUser:",
+        error.response || error.message
+      );
       set({ fetchingUser: false, error: null, user: null });
-      // No need to throw an error here for the initial load
     }
   },
 

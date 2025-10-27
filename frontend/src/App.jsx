@@ -16,7 +16,13 @@ const App = () => {
 
   const {fetchUser, fetchingUser} = useAuthStore();
   useEffect(() => {
+    console.log("App.jsx: useEffect triggered, calling fetchUser...");
     fetchUser();
+    useEffect(() => {
+  console.log("App.jsx: useEffect triggered, calling fetchUser..."); 
+  fetchUser();
+  console.log("App.jsx: fetchUser call initiated."); 
+}, [fetchUser]);
   }, [fetchUser]);
 
   if (fetchingUser) {
