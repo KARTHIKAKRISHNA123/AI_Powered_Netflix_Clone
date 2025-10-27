@@ -41,7 +41,7 @@ const App = () => {
         <Route path={'/ai-recommendations'}  element={<AIRecommendations />} />
       </Routes>
     
-      <Footer /> 
+      
     </div>
   )
 }
