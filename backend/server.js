@@ -15,15 +15,15 @@ const PORT = process.env.PORT || 3000;
 
 // --- 3. MIDDLEWARE SETUP ---
 
-// Note: Using process.env.CLIENT_URL directly in origin is correct for production
+
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, // Ensure this matches your frontend URL in production
+    origin: process.env.CLIENT_URL, 
     credentials: true,
   })
 );
 app.use(express.json());
-app.use(cookieParser()); // Make sure cookie-parser is used
+app.use(cookieParser()); 
 
 // --- 4. API ROUTES ---
 app.get("/", (req, res) => {
@@ -63,12 +63,12 @@ app.post("/api/auth/signup", async (req, res) => {
 
     const isProduction = process.env.NODE_ENV === "production";
 
-    console.log(`Signup: Setting cookie. isProduction: ${isProduction}`); // Debug log
+    console.log(`Signup: Setting cookie. isProduction: ${isProduction}`); 
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction, // Should be true in production (HTTPS)
-      sameSite: isProduction ? "none" : "lax", // Must be 'none' for cross-site production
+      secure: isProduction, 
+      sameSite: isProduction ? "none" : "lax", 
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       domain: isProduction ? ".onrender.com" : undefined,
       path: "/",
@@ -104,12 +104,12 @@ app.post("/api/auth/signin", async (req, res) => {
     });
     const isProduction = process.env.NODE_ENV === "production";
 
-    console.log(`Signin: Setting cookie. isProduction: ${isProduction}`); // Debug log
+    console.log(`Signin: Setting cookie. isProduction: ${isProduction}`); 
 
     res.cookie("token", token, {
       httpOnly: true,
-      secure: isProduction, // Should be true in production (HTTPS)
-      sameSite: isProduction ? "none" : "lax", // Must be 'none' for cross-site production
+      secure: isProduction, 
+      sameSite: isProduction ? "none" : "lax", 
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       domain: isProduction ? ".onrender.com" : undefined,
       path: "/",
@@ -133,16 +133,16 @@ app.post("/api/auth/signin", async (req, res) => {
 app.get("/api/auth/me", async (req, res) => {
   // --- START TEMPORARY LOGGING ---
   console.log("--- /api/auth/me Request Received ---");
-  console.log("Request Origin:", req.headers.origin); // Log the origin
-  console.log("Raw Cookies Header:", req.headers.cookie); // Log raw cookie header
-  console.log("Parsed req.cookies:", req.cookies); // Log cookies parsed by cookie-parser
-  // --- END TEMPORARY LOGGING ---
+  console.log("Request Origin:", req.headers.origin); 
+  console.log("Raw Cookies Header:", req.headers.cookie); 
+  console.log("Parsed req.cookies:", req.cookies); 
+  
   try {
-    const { token } = req.cookies; // Get token from parsed cookies
-    console.log("Extracted token:", token); // Log the extracted token specifically
+    const { token } = req.cookies; 
+    console.log("Extracted token:", token); 
 
     if (!token) {
-      console.log("No token found in parsed cookies."); // Log if token extraction failed
+      console.log("No token found in parsed cookies."); 
       return res
         .status(401)
         .json({ message: "Authorization denied, no token" });
@@ -150,21 +150,21 @@ app.get("/api/auth/me", async (req, res) => {
 
     // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Token decoded successfully:", decoded); // Log successful decoding
+    console.log("Token decoded successfully:", decoded); 
 
     // Find the user
     const user = await User.findById(decoded.id).select("-password");
     if (!user) {
-      console.log("User not found for ID:", decoded.id); // Log if user lookup failed
+      console.log("User not found for ID:", decoded.id); 
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log("User found:", user.username); // Log successful user retrieval
+    console.log("User found:", user.username); 
     res.status(200).json({ user });
   } catch (error) {
-    // Log the specific error during verification or user lookup
+    
     console.error("/api/auth/me Error:", error.message);
-    // Determine if it's a JWT error or another issue
+    
     if (
       error.name === "JsonWebTokenError" ||
       error.name === "TokenExpiredError"
@@ -182,13 +182,12 @@ app.get("/api/auth/me", async (req, res) => {
 app.post("/api/auth/logout", (req, res) => {
   try {
     const isProduction = process.env.NODE_ENV === "production";
-    console.log(`Logout: Clearing cookie. isProduction: ${isProduction}`); // Debug log
+    console.log(`Logout: Clearing cookie. isProduction: ${isProduction}`); 
 
     res.clearCookie("token", {
       httpOnly: true,
-      secure: isProduction, // Match the setting logic used when creating
-      sameSite: isProduction ? "none" : "lax", // Match the setting logic used when creating
-      // Optionally add path: '/' if your cookies have a specific path
+      secure: isProduction, 
+      sameSite: isProduction ? "none" : "lax", 
       domain: isProduction ? ".onrender.com" : undefined,
       path: "/",
     });
@@ -206,8 +205,8 @@ const startServer = async () => {
 
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
-      console.log(`NODE_ENV is set to: ${process.env.NODE_ENV}`); // Log NODE_ENV on startup
-      console.log(`CLIENT_URL is set to: ${process.env.CLIENT_URL}`); // Log CLIENT_URL on startup
+      console.log(`NODE_ENV is set to: ${process.env.NODE_ENV}`); 
+      console.log(`CLIENT_URL is set to: ${process.env.CLIENT_URL}`); 
     });
   } catch (error) {
     console.error("Failed to start server:", error);
