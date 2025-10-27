@@ -1,3 +1,4 @@
+// frontend/src/App.jsx
 import React from 'react';
 import Navbar from './components/Navbar';
 import Homepage from './pages/Homepage';
@@ -7,27 +8,26 @@ import Moviepage from './pages/Moviepage';
 import SignIn from './pages/SignIn';
 import SignUp from './pages/SignUp';
 import {Toaster} from 'react-hot-toast';
-import { useEffect } from 'react';
+import { useEffect } from 'react'; 
 import { useAuthStore } from './store/authStore';
 import AIRecommendations from './pages/AIRecommendations';
 
-
 const App = () => {
-
   const {fetchUser, fetchingUser} = useAuthStore();
+
   useEffect(() => {
+    
     console.log("App.jsx: useEffect triggered, calling fetchUser...");
     fetchUser();
-    useEffect(() => {
-  console.log("App.jsx: useEffect triggered, calling fetchUser..."); 
-  fetchUser();
-  console.log("App.jsx: fetchUser call initiated."); 
-}, [fetchUser]);
-  }, [fetchUser]);
+    console.log("App.jsx: fetchUser call initiated.");
+    
+  }, [fetchUser]); 
 
+  
   if (fetchingUser) {
-    return <p >Loading...</p>
+    return <p className='text-white text-center text-xl mt-10'>Loading User...</p> 
   }
+
   return (
     <div >
       <Toaster />
@@ -39,13 +39,9 @@ const App = () => {
         <Route path={'/signin'}  element={<SignIn />} />
         <Route path={'/signup'}  element={<SignUp />} />
         <Route path={'/ai-recommendations'}  element={<AIRecommendations />} />
-
       </Routes>
-
-      
-
-
-      
+    
+      <Footer /> 
     </div>
   )
 }
