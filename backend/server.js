@@ -71,6 +71,7 @@ app.post("/api/auth/signup", async (req, res) => {
       sameSite: isProduction ? "none" : "lax", // Must be 'none' for cross-site production
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       domain: isProduction ? ".onrender.com" : undefined,
+      path: "/",
     });
 
     const userResponse = {
@@ -111,6 +112,7 @@ app.post("/api/auth/signin", async (req, res) => {
       sameSite: isProduction ? "none" : "lax", // Must be 'none' for cross-site production
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
       domain: isProduction ? ".onrender.com" : undefined,
+      path: "/",
     });
 
     const userResponse = {
