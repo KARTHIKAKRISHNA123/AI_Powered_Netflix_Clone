@@ -51,7 +51,7 @@ const SignIn = () => {
 
             <div className='text-gray-400 text-sm mt-10'>
 
-                <p>New to Netflix? <span onClick={() => navigate("/signup")}className='text-white font-medium cursor-pointer ml-2 hover:underline'>Sign Up</span></p>
+                <p>New to CineMind? <span onClick={() => navigate("/signup")}className='text-white font-medium cursor-pointer ml-2 hover:underline'>Sign Up</span></p>
             </div>
             </div>
     

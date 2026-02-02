@@ -11,15 +11,18 @@ import cors from "cors";
 
 // --- 2. EXPRESS APP CONFIGURATION ---
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5000;
+
+// *** CRITICAL FIX FOR RENDER DEPLOYMENT ***
+// This tells Express to trust the Load Balancer (HTTPS)
+// Without this, the 'secure' cookie flag is ignored on Render
+app.set("trust proxy", 1); 
 
 // --- 3. MIDDLEWARE SETUP ---
-
-
 app.use(
   cors({
-    origin: process.env.CLIENT_URL, 
-    credentials: true,
+    origin: process.env.CLIENT_URL, // Ensure this matches your Frontend URL exactly
+    credentials: true, // This allows cookies to travel
   })
 );
 app.use(express.json());
@@ -36,20 +39,12 @@ app.get("/", (req, res) => {
 app.post("/api/auth/signup", async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    if (
-      !username ||
-      !email ||
-      !password ||
-      username.trim() === "" ||
-      email.trim() === ""
-    ) {
+    if (!username || !email || !password || username.trim() === "" || email.trim() === "") {
       return res.status(400).json({ message: "All fields are required" });
     }
     const userExists = await User.findOne({ $or: [{ email }, { username }] });
     if (userExists) {
-      return res
-        .status(400)
-        .json({ message: "Username or email already exists" });
+      return res.status(400).json({ message: "Username or email already exists" });
     }
     const hashedPassword = await bcryptjs.hash(password, 10);
     const newUser = await User.create({
@@ -58,20 +53,16 @@ app.post("/api/auth/signup", async (req, res) => {
       password: hashedPassword,
     });
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "15d",
     });
 
     const isProduction = process.env.NODE_ENV === "production";
 
-    console.log(`Signup: Setting cookie. isProduction: ${isProduction}`); 
-
     res.cookie("token", token, {
+      maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       httpOnly: true,
-      secure: isProduction, 
-      sameSite: isProduction ? "none" : "lax", 
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: isProduction ? ".onrender.com" : undefined,
-      path: "/",
+      sameSite: isProduction ? "none" : "lax", // 'none' is REQUIRED for cross-site (Render)
+      secure: isProduction, // Must be true if sameSite is 'none'
     });
 
     const userResponse = {
@@ -79,9 +70,7 @@ app.post("/api/auth/signup", async (req, res) => {
       username: newUser.username,
       email: newUser.email,
     };
-    res
-      .status(201)
-      .json({ user: userResponse, message: "User signed up successfully" });
+    res.status(201).json({ user: userResponse, message: "User signed up successfully" });
   } catch (error) {
     console.error("Signup Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
@@ -100,19 +89,16 @@ app.post("/api/auth/signin", async (req, res) => {
       return res.status(400).json({ message: "Invalid credentials" });
     }
     const token = jwt.sign({ id: userDoc._id }, process.env.JWT_SECRET, {
-      expiresIn: "7d",
+      expiresIn: "15d",
     });
+    
     const isProduction = process.env.NODE_ENV === "production";
 
-    console.log(`Signin: Setting cookie. isProduction: ${isProduction}`); 
-
     res.cookie("token", token, {
+      maxAge: 15 * 24 * 60 * 60 * 1000,
       httpOnly: true,
-      secure: isProduction, 
-      sameSite: isProduction ? "none" : "lax", 
-      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: isProduction ? ".onrender.com" : undefined,
-      path: "/",
+      sameSite: isProduction ? "none" : "lax",
+      secure: isProduction,
     });
 
     const userResponse = {
@@ -120,60 +106,36 @@ app.post("/api/auth/signin", async (req, res) => {
       username: userDoc.username,
       email: userDoc.email,
     };
-    res
-      .status(200)
-      .json({ user: userResponse, message: "Logged in successfully" });
+    res.status(200).json({ user: userResponse, message: "Logged in successfully" });
   } catch (error) {
     console.error("Signin Error:", error);
     res.status(500).json({ message: "Internal Server Error" });
   }
 });
 
-// GET USER PROFILE ROUTE ***(WITH ADDED LOGGING)***
+// GET USER PROFILE ROUTE
 app.get("/api/auth/me", async (req, res) => {
-  // --- START TEMPORARY LOGGING ---
-  console.log("--- /api/auth/me Request Received ---");
-  console.log("Request Origin:", req.headers.origin); 
-  console.log("Raw Cookies Header:", req.headers.cookie); 
-  console.log("Parsed req.cookies:", req.cookies); 
-  
   try {
-    const { token } = req.cookies; 
-    console.log("Extracted token:", token); 
-
+    const token = req.cookies.token; 
+    
     if (!token) {
-      console.log("No token found in parsed cookies."); 
-      return res
-        .status(401)
-        .json({ message: "Authorization denied, no token" });
+      return res.status(401).json({ message: "Authorization denied, no token" });
     }
 
-    // Verify the token
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    console.log("Token decoded successfully:", decoded); 
-
-    // Find the user
     const user = await User.findById(decoded.id).select("-password");
+    
     if (!user) {
-      console.log("User not found for ID:", decoded.id); 
       return res.status(404).json({ message: "User not found" });
     }
 
-    console.log("User found:", user.username); 
     res.status(200).json({ user });
   } catch (error) {
-    
-    console.error("/api/auth/me Error:", error.message);
-    
-    if (
-      error.name === "JsonWebTokenError" ||
-      error.name === "TokenExpiredError"
-    ) {
+    // console.error("/api/auth/me Error:", error.message); // Optional: keep for dev error logging
+    if (error.name === "JsonWebTokenError" || error.name === "TokenExpiredError") {
       res.status(401).json({ message: "Token is not valid" });
     } else {
-      res
-        .status(500)
-        .json({ message: "Internal Server Error during auth check" });
+      res.status(500).json({ message: "Internal Server Error" });
     }
   }
 });
@@ -182,14 +144,11 @@ app.get("/api/auth/me", async (req, res) => {
 app.post("/api/auth/logout", (req, res) => {
   try {
     const isProduction = process.env.NODE_ENV === "production";
-    console.log(`Logout: Clearing cookie. isProduction: ${isProduction}`); 
-
+    
     res.clearCookie("token", {
       httpOnly: true,
-      secure: isProduction, 
       sameSite: isProduction ? "none" : "lax", 
-      domain: isProduction ? ".onrender.com" : undefined,
-      path: "/",
+      secure: isProduction,
     });
     res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
@@ -202,7 +161,6 @@ app.post("/api/auth/logout", (req, res) => {
 const startServer = async () => {
   try {
     await connectToDB();
-
     app.listen(PORT, () => {
       console.log(`Server is running on port ${PORT}`);
       console.log(`NODE_ENV is set to: ${process.env.NODE_ENV}`); 

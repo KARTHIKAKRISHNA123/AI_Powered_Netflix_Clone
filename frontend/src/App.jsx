@@ -17,9 +17,9 @@ const App = () => {
 
   useEffect(() => {
     
-    console.log("App.jsx: useEffect triggered, calling fetchUser...");
-    fetchUser();
-    console.log("App.jsx: fetchUser call initiated.");
+    // console.log("App.jsx: useEffect triggered, calling fetchUser...");
+    // fetchUser();
+    // console.log("App.jsx: fetchUser call initiated.");
     
   }, [fetchUser]); 
 

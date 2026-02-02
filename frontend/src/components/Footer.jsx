@@ -4,14 +4,14 @@ const Footer = () => {
   return (
     <div className="text-[#737373] md:px-10">
       <div className="py-20">
-        <p>&copy; Developed by Team 1</p>
+        <p>&copy; Developed by Team 1 - Tech Titans</p>
         <p>Watch shows on Netflix</p>
         <p>This is a clone website. All rights belong to Netflix</p>
         <p>
           Privacy Policy | Terms of Use | Cookie Preferences | Corporate
           Information
         </p>
-        <p>Netflix India</p>
+        <p>CineMind</p>
       </div>
 
       <p className="pb-5">Questions? contact Us.</p>
