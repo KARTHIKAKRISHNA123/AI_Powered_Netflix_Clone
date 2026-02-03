@@ -2,9 +2,13 @@ import { create } from "zustand";
 import axios from "axios";
 
 axios.defaults.withCredentials = true;
-const API_URL = "https://ai-powered-netflix-clone.onrender.com";
 
-// const API_URL =   "http://localhost:3000";
+// *** DYNAMIC URL CONFIGURATION ***
+// 1. If running 'npm run dev', it uses localhost:5000
+// 2. If deployed on Render, it uses the Production URL
+const API_URL = import.meta.env.MODE === "development"
+    ? "http://localhost:5000"
+    : "https://ai-powered-netflix-clone.onrender.com"; // <--- PASTE YOUR COPIED RENDER BACKEND URL HERE
 
 export const useAuthStore = create((set) => ({
   // Initial States
@@ -27,12 +31,9 @@ export const useAuthStore = create((set) => ({
 
       set({ user: response.data.user, isLoading: false });
     } catch (error) {
-      // CORRECTED ERROR HANDLING
       set({
         isLoading: false,
-        error:
-          error.response?.data?.message ||
-          "Error signing up. Please try again.",
+        error: error.response?.data?.message || "Error signing up. Please try again.",
       });
       throw error;
     }
@@ -51,33 +52,21 @@ export const useAuthStore = create((set) => ({
       set({ user, message, isLoading: false });
       return { user, message };
     } catch (error) {
-      // CORRECTED ERROR HANDLING
       set({
         isLoading: false,
-        error:
-          error.response?.data?.message ||
-          "Error signing in. Please check your credentials.",
+        error: error.response?.data?.message || "Error signing in. Please check your credentials.",
       });
       throw error;
     }
   },
 
   fetchUser: async () => {
-    console.log("authStore.js: fetchUser function started.");
     set({ fetchingUser: true, error: null });
     try {
-      console.log(`authStore.js: Making GET request to ${API_URL}/api/auth/me`);
       const response = await axios.get(`${API_URL}/api/auth/me`);
-      console.log(
-        "authStore.js: Received response from /api/auth/me:",
-        response.data
-      );
       set({ user: response.data.user, fetchingUser: false });
     } catch (error) {
-      console.error(
-        "authStore.js: Error in fetchUser:",
-        error.response || error.message
-      );
+      // If error (e.g., 401 unauthorized), we stop loading and set user to null
       set({ fetchingUser: false, error: null, user: null });
     }
   },
@@ -91,7 +80,6 @@ export const useAuthStore = create((set) => ({
       set({ message, isLoading: false, user: null, error: null });
       return { message };
     } catch (error) {
-      // CORRECTED ERROR HANDLING
       set({
         isLoading: false,
         error: error.response?.data?.message || "Error logging out.",
