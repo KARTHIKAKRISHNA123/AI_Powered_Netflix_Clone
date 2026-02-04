@@ -6,7 +6,7 @@ import { Navigation, A11y } from "swiper/modules";
 
 import "swiper/css";
 import "swiper/css/navigation";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const CardList = ({ title, category }) => {
   const [data, setData] = React.useState([]);

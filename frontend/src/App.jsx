@@ -2,7 +2,7 @@
 import React from 'react';
 import Navbar from './components/Navbar';
 import Homepage from './pages/Homepage';
-import { Route, Routes } from 'react-router';
+import { Route, Routes } from 'react-router-dom';
 import Footer from './components/Footer';
 import Moviepage from './pages/Moviepage';
 import SignIn from './pages/SignIn';

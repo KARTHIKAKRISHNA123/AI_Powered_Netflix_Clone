@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import HeroBg from '../assets/herobg2.jpg';
 import { Bookmark, Play } from 'lucide-react';
-import { Link } from 'react-router';
+import { Link } from 'react-router-dom';
 
 const Hero = () => {
 

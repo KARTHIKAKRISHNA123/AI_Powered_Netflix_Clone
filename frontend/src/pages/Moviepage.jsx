@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Link, useParams } from "react-router";
+import { Link, useParams } from "react-router-dom";
 import { Play } from "lucide-react";
 import VideoPlayer from "../components/VideoPlayer";
 

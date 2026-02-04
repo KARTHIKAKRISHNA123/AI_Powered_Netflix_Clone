@@ -1,7 +1,7 @@
 import { HelpCircle, LogOut, Search, Settings } from 'lucide-react';
 import Logo from '../assets/logo.png';
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router'; // 1. Corrected import
+import { Link, useNavigate } from 'react-router-dom'; // 1. Corrected import
 import { useAuthStore } from '../store/authStore';  // Corrected filename if needed
 import { toast } from 'react-hot-toast';
 
