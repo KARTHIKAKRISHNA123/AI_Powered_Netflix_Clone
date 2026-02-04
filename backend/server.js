@@ -61,8 +61,8 @@ app.post("/api/auth/signup", async (req, res) => {
     res.cookie("token", token, {
       maxAge: 15 * 24 * 60 * 60 * 1000, // 15 days
       httpOnly: true,
-      sameSite: isProduction ? "none" : "lax", // 'none' is REQUIRED for cross-site (Render)
-      secure: isProduction, // Must be true if sameSite is 'none'
+      sameSite: "none", // 'none' is REQUIRED for cross-site (Render)
+      secure: true, // Must be true if sameSite is 'none'
     });
 
     const userResponse = {

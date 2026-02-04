@@ -8,7 +8,7 @@ const config = {
     responseMimeType: "text/plain",
 }
 
-const model = "gemini-2.5-flash"; //change the model here to gemini-2.0-flash 
+const model = "gemini-1.5-flash"; //change the model here to gemini-2.0-flash 
 
 export async function getAIRecommendation(prompt) {
     try {
