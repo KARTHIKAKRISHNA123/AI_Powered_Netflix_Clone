@@ -1,27 +1,19 @@
-import {GoogleGenAI} from '@google/genai';
+import { GoogleGenerativeAI } from "@google/generative-ai";
 
-const ai = new GoogleGenAI ({
-    apiKey: import.meta.env.VITE_GOOGLE_GENAI_API_KEY
-});
+// Initialize the standard SDK
+const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GOOGLE_GENAI_API_KEY);
 
-const config = {
-    responseMimeType: "text/plain",
-}
-
-const model = "gemini-1.5-flash"; //change the model here to gemini-2.0-flash 
+// Use the stable, widely available model
+// "gemini-1.5-flash" is the correct name for this SDK
+const model = genAI.getGenerativeModel({ model: "gemini-2.5-flash" });
 
 export async function getAIRecommendation(prompt) {
     try {
-        const response = await ai.models.generateContent({
-            model,
-            config,
-            contents: [{ role: "user", parts: [{text: prompt}]}]
-        })
-
-        return response?.candidates?.[0]?.content?.parts?.[0]?.text
+        const result = await model.generateContent(prompt);
+        const response = await result.response;
+        return response.text(); // Simple text return
     } catch (error) {
         console.error("Error fetching AI recommendation:", error);
         return null;
-        
     }
 }
