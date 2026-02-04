@@ -18,7 +18,7 @@ const App = () => {
   useEffect(() => {
     
     // console.log("App.jsx: useEffect triggered, calling fetchUser...");
-    // fetchUser();
+    fetchUser();
     // console.log("App.jsx: fetchUser call initiated.");
     
   }, [fetchUser]); 
@@ -40,6 +40,7 @@ const App = () => {
         <Route path={'/signup'}  element={<SignUp />} />
         <Route path={'/ai-recommendations'}  element={<AIRecommendations />} />
       </Routes>
+      <Footer />
     
       
     </div>
