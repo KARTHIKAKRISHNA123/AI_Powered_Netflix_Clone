@@ -6,10 +6,17 @@ axios.defaults.withCredentials = true;
 // *** DYNAMIC URL CONFIGURATION ***
 // 1. If running 'npm run dev', it uses localhost:5000
 // 2. If deployed on Render, it uses the Production URL
-const API_URL = import.meta.env.MODE === "development"
-    ? "http://localhost:5000"
-    : "https://ai-powered-netflix-clone.onrender.com"; // <--- PASTE YOUR COPIED RENDER BACKEND URL HERE
+// const API_URL = import.meta.env.MODE === "development"
+//     ? "http://localhost:5000"
+//     : "https://ai-powered-netflix-clone.onrender.com"; // <--- PASTE YOUR COPIED RENDER BACKEND URL HERE
 
+
+// REPLACE "https://your-backend.onrender.com" with your ACTUAL Backend URL
+const API_URL = import.meta.env.MODE === "development" 
+  ? "http://localhost:5000/api/auth" 
+  : "https://ai-powered-netflix-clone.onrender.com/api/auth";
+
+  
 export const useAuthStore = create((set) => ({
   // Initial States
   user: null,
