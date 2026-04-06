@@ -2,7 +2,7 @@
 
 ## Live Deployment
 
-**Live Application:** https://ai-powered-netflix-clone.onrender.com/
+**Live Application:** https://ai-powered-netflix-clone-1.onrender.com/
 
 **Frontend Repository:** https://github.com/karthikakrishna123/ai_powered_netflix_clone
 
