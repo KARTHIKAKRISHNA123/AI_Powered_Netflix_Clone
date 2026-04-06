@@ -1,13 +1,10 @@
-```
 # CineMind - AI-Powered Movie Discovery Platform
 
 ## Live Deployment
 
-**Live Application:**  
-https://ai-powered-netflix-clone.onrender.com/
+**Live Application:** https://ai-powered-netflix-clone.onrender.com/
 
-**Frontend Repository:**  
-https://github.com/karthikakrishna123/ai_powered_netflix_clone
+**Frontend Repository:** https://github.com/karthikakrishna123/ai_powered_netflix_clone
 
 CineMind is an advanced, full-stack streaming application engineered to emulate the Netflix experience while introducing next-generation Generative AI search capabilities.
 
@@ -28,22 +25,18 @@ Instead of traditional keyword matching, CineMind uses Natural Language Processi
 
 ### Core Features
 
-**AI Semantic Search**  
-Uses Google Gemini 1.5 Flash to generate movie recommendations based on natural language prompts.
+**AI Semantic Search** Uses Google Gemini 1.5 Flash to generate movie recommendations based on natural language prompts.
 
 Example prompt:  
 “Give me slow emotional drama movies from the 1990s.”
 
 The system returns a structured JSON list of movies.
 
-**Secure Authentication**  
-Authentication uses JWT tokens, HTTP-only cookies, SameSite=None, and Secure cookies. This prevents XSS token theft and localStorage vulnerabilities.
+**Secure Authentication** Authentication uses JWT tokens, HTTP-only cookies, SameSite=None, and Secure cookies. This prevents XSS token theft and localStorage vulnerabilities.
 
-**Dynamic Movie Data**  
-Movie metadata comes from TMDB API including posters, ratings, genres, trailers, and descriptions.
+**Dynamic Movie Data** Movie metadata comes from TMDB API including posters, ratings, genres, trailers, and descriptions.
 
-**Responsive UI**  
-Frontend built with React, TailwindCSS, and Swiper.js featuring mobile-first design, smooth carousel animations, and Netflix-style browsing.
+**Responsive UI** Frontend built with React, TailwindCSS, and Swiper.js featuring mobile-first design, smooth carousel animations, and Netflix-style browsing.
 
 ## System Architecture
 
@@ -217,7 +210,7 @@ ai_powered_netflix_clone
 ### Clone the Repository
 
 ```bash
-git clone https://github.com/karthikakrishna123/ai_powered_netflix_clone.git
+git clone [https://github.com/karthikakrishna123/ai_powered_netflix_clone.git](https://github.com/karthikakrishna123/ai_powered_netflix_clone.git)
 cd ai_powered_netflix_clone
 ```
 
@@ -275,8 +268,6 @@ Production considerations already handled:
 
 ## Author
 
-**Karthika Krishna M (KK)**  
-Computer Science Engineer | MERN Developer | AI Enthusiast  
+**Karthika Krishna M ** Computer Science Engineering Student | MERN Developer | AI Enthusiast  
 
 GitHub: https://github.com/karthikakrishna123
-```
