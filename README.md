@@ -1,3 +1,5 @@
+
+
 ```markdown
 # CineMind - AI-Powered Movie Discovery Platform
 
@@ -15,14 +17,14 @@ Instead of traditional keyword matching, CineMind uses Natural Language Processi
 
 ## Table of Contents
 
-1. Project Overview  
-2. System Architecture  
-3. UML Diagrams  
-4. Tech Stack  
-5. Directory Structure  
-6. API Reference  
-7. Installation & Setup  
-8. Deployment Architecture  
+1. [Project Overview](#project-overview)  
+2. [System Architecture](#system-architecture)  
+3. [UML Diagrams](#uml-diagrams)  
+4. [Tech Stack](#tech-stack)  
+5. [Directory Structure](#directory-structure)  
+6. [API Reference](#api-reference)  
+7. [Installation & Setup](#installation--setup)  
+8. [Deployment Architecture](#deployment-architecture)  
 
 ## Project Overview
 
@@ -153,28 +155,42 @@ Express -->> Client: return profile
 ## Tech Stack
 
 ### Frontend
-- React
-- React Router
-- TailwindCSS
-- Swiper.js
-- Axios
-- Zustand
-- Google Generative AI SDK
-- Lucide Icons
-- React Hot Toast
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/a/a7/React-icon.svg" alt="React" width="60" height="60" title="React">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/d/d5/Tailwind_CSS_Logo.svg" alt="Tailwind CSS" width="120" height="60" title="Tailwind CSS">
+
+<img src="https://swiperjs.com/images/swiper-logo.svg" alt="Swiper.js" width="80" height="60" title="Swiper.js">
+
+<img src="https://zustand-demo.pmnd.rs/favicon.ico" alt="Zustand" width="60" height="60" title="Zustand">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/6a/JavaScript-logo.png" alt="JavaScript" width="60" height="60" title="JavaScript">
+
+</div>
+
+**Technologies:** React, React Router, TailwindCSS, Swiper.js, Axios, Zustand, Google Generative AI SDK, Lucide Icons, React Hot Toast
 
 ### Backend
-- Node.js
-- Express.js
-- MongoDB
-- Mongoose
-- JWT
-- Bcrypt
-- Cookie Parser
-- CORS
-- dotenv
 
-## Project Directory Structure
+<div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center;">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/d/d9/Node.js_logo.svg" alt="Node.js" width="100" height="60" title="Node.js">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/6/64/Expressjs.png" alt="Express.js" width="120" height="50" title="Express.js">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/93/MongoDB_Logo.svg" alt="MongoDB" width="120" height="60" title="MongoDB">
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/thumb/8/8a/Google_Gemini_logo.svg/512px-Google_Gemini_logo.svg.png" alt="Google Gemini" width="100" height="50" title="Google Gemini">
+
+<img src="https://www.themoviedb.org/assets/2/v4/logos/v2/blue_square_2-d53e3c9e0c6d1c0a3e1b0c3d8f8d8f8d.svg" alt="TMDB" width="80" height="60" title="The Movie Database (TMDB)">
+
+</div>
+
+**Technologies:** Node.js, Express.js, MongoDB, Mongoose, JWT, Bcrypt, Cookie Parser, CORS, dotenv
+
+## Directory Structure
 
 ```
 ai_powered_netflix_clone
@@ -216,7 +232,7 @@ ai_powered_netflix_clone
 **Signup**  
 `POST /signup`  
 Payload:
-```
+```json
 {
   "username": "string",
   "email": "string",
@@ -227,7 +243,7 @@ Payload:
 **Signin**  
 `POST /signin`  
 Payload:
-```
+```json
 {
   "username": "string",
   "password": "string"
@@ -258,7 +274,7 @@ cd backend
 npm install
 ```
 
-Create `.env` file in backend folder:
+Create `.env` file in the backend folder:
 
 ```
 PORT=5000
@@ -267,7 +283,7 @@ JWT_SECRET=your_secret
 CLIENT_URL=http://localhost:5173
 ```
 
-Run backend server:
+Run backend:
 
 ```bash
 npm run dev
@@ -280,7 +296,7 @@ cd frontend
 npm install
 ```
 
-Create `.env` file in frontend folder:
+Create `.env` file in the frontend folder:
 
 ```
 VITE_TMDB_API_KEY=your_tmdb_token
@@ -295,7 +311,7 @@ npm run dev
 
 ## Deployment Architecture
 
-Recommended hosting: Render  
+Recommended hosting: **Render**
 
 Production considerations already handled:
 - Trust proxy enabled
@@ -311,3 +327,8 @@ Computer Science Engineer | MERN Developer | AI Enthusiast
 GitHub: https://github.com/karthikakrishna123
 ```
 
+
+
+Copy the entire block above and replace your current `README.md`. The colorful tech logos should now appear nicely.  
+
+Let me know if you want screenshots section added or any other enhancements!
